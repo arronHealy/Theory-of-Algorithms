@@ -4,6 +4,8 @@ hello-programs/hello
 c-bit-operations/lookatbits
 c-bit-operations/lookatbits_part2
 
+theory-of-algorithms-project/md5
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
