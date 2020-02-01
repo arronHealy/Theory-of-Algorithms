@@ -50,13 +50,46 @@ int main(int argc, char *argv[])
 void readFileInput()
 {
   char* filePath;
+  FILE* readFile;
+
+  int pos = 0;
+
+  char testTexts[3][30];
 
   filePath = (char*)malloc(30 * sizeof(char));
+  
   printf("\nEnter the File path you wish to read: ");
   scanf("%s", filePath);
 
   printf("File path entered: %s", filePath);
   printf("\n");
+
+  readFile = fopen(filePath, "r");
+
+  if(readFile == NULL)
+  {
+    printf("Error reading file %s, Please Try again...", filePath);
+    return;
+
+  }
+  else
+  {
+        
+    while(fscanf(readFile, "%s", testTexts[pos]) == 1)
+    {
+
+     // fscanf(readFile, "%s", testTexts[pos]);
+
+      printf("\nFile text at pos %d is: %s", pos, testTexts[pos]);
+      printf("\n");
+      
+
+      pos++;
+    }
+
+    fclose(readFile);
+  }
+  
 }
 
 
