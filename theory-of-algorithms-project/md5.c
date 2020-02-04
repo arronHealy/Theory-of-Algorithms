@@ -7,6 +7,7 @@ void readStringInput();
 
 void readFileInput();
 
+int getFileLineCount(char* fileName);
 
 
 int main(int argc, char *argv[])
@@ -37,7 +38,7 @@ int main(int argc, char *argv[])
             break;
 
            default:
-             printf("Invalid input entered! Please Try Again");
+             printf("Invalid input entered! Please Try Again\n");
        }
 
   }while(userOption != -1);
@@ -47,6 +48,39 @@ int main(int argc, char *argv[])
 }
 
 
+int getFileLineCount(char* fileName)
+{
+  FILE* file;
+  int counter = 0;
+  char c;
+
+  file = fopen(fileName, "r");
+
+  if(file == NULL)
+  {
+    printf("Error reading file %s, Please Try again...", fileName);
+    return 0;
+
+  }
+  else
+  {
+
+    for(c = getc(file); c != EOF; c = getc(file))
+    {
+      if(c == '\n')
+      {
+        counter = counter + 1;
+      }
+    }
+    fclose(file);
+    printf("file num lines: %d \n", counter);
+    
+  }
+
+  return counter;
+
+}
+
 void readFileInput()
 {
   char* filePath;
@@ -54,15 +88,17 @@ void readFileInput()
 
   int pos = 0;
 
-  char testTexts[3][30];
+  int fileLineCount = 0;
+
 
   filePath = (char*)malloc(30 * sizeof(char));
   
   printf("\nEnter the File path you wish to read: ");
   scanf("%s", filePath);
 
-  printf("File path entered: %s", filePath);
-  printf("\n");
+  fileLineCount = getFileLineCount(filePath);
+
+  printf("file line count: %d \n", fileLineCount);
 
   readFile = fopen(filePath, "r");
 
@@ -74,11 +110,10 @@ void readFileInput()
   }
   else
   {
-        
+    char testTexts[fileLineCount - 1][30];
+
     while(fscanf(readFile, "%s", testTexts[pos]) == 1)
     {
-
-     // fscanf(readFile, "%s", testTexts[pos]);
 
       printf("\nFile text at pos %d is: %s", pos, testTexts[pos]);
       printf("\n");
