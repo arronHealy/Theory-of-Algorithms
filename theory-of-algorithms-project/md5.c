@@ -1,7 +1,26 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 
+//define data structure for MD5 processing
+// https://www.ietf.org/rfc/rfc1321.txt -  page 8
+typedef struct {
+  uint32_t state[4];  // message digest state (A,B,C,D)
+  uint32_t count[2];  // number of bits, mod 2^64, least significant bit first or little endian first
+  unsigned char buffer[64]; // message digest input buffer
+} md5_context;
+
+
+// defined md5 padding constant, append 1 to end followed by 0's
+// https://www.ietf.org/rfc/rfc1321.txt -  page 10
+static unsigned char PADDING[64] = {
+  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+uint32_t ROTATE_LEFT(uint32_t x, int n);
 
 void readStringInput();
 
@@ -47,6 +66,13 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+
+// rotate bits to left method definition from md5 standard
+// https://www.ietf.org/rfc/rfc1321.txt -  page 10
+uint32_t ROTATE_LEFT(uint32_t x, int n)
+{
+  return ((x << n) | (x >> (32 - n)));
+}
 
 int getFileLineCount(char* fileName)
 {
