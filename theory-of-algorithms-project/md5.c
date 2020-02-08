@@ -1,13 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 
-//define data structure for MD5 processing
-// https://www.ietf.org/rfc/rfc1321.txt -  page 8
-typedef struct {
-  uint32_t state[4];  // message digest state (A,B,C,D)
-  uint32_t count[2];  // number of bits, mod 2^64, least significant bit first or little endian first
-  unsigned char buffer[64]; // message digest input buffer
-} md5_context;
+// include md5 struct via header file so struct can be seen globally and not restricted to being first defined in main function
+#include "md5.h"
 
 
 // defined md5 padding constant, append 1 to end followed by 0's
@@ -24,7 +20,7 @@ static unsigned char PADDING[64] = {
 
 // C program function definitions, implementation and references towards end of file
 
-void init_MD5_Context(md5_context *context);
+struct md5_context* init_MD5_Context(struct md5_context *context);
 
 uint32_t ROTATE_LEFT(uint32_t x, int n);
 
@@ -39,7 +35,7 @@ int getFileLineCount(char* fileName);
 int main(int argc, char *argv[])
 {
   int userOption;
-
+  
   printf("\nMD5 Hash Function");
   printf("\nEnter -1 to exit the program!");
   printf("\nEnter 1 if you wish to enter Text to be hashed");
@@ -76,8 +72,10 @@ int main(int argc, char *argv[])
 
 // MD5 Data Structure initialization, Begins MD5 operation of writing a new context
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10 
-void init_MD5_Context(md5_context *context)
+struct md5_context* init_MD5_Context(struct md5_context *context)
 {
+  context = (struct md5_context*)malloc(sizeof(struct md5_context));
+
   // initialize bit counts to 0
   context->count[0] = 0;
   context->count[1] = 0;
@@ -88,6 +86,7 @@ void init_MD5_Context(md5_context *context)
   context->state[2] = 0x98badcfe;
   context->state[3] = 0x10325476;
 
+  return context;
 }
 
 // rotate bits to left method definition from md5 standard
@@ -139,6 +138,7 @@ void readFileInput()
 
   int fileLineCount = 0;
 
+  // md5_context *context;
 
   filePath = (char*)malloc(30 * sizeof(char));
   
@@ -181,6 +181,8 @@ void readStringInput()
 {
   char* messageText;
 
+  struct md5_context *context = NULL;
+
   messageText = (char*)malloc(30 * sizeof(char));
  
   printf("\nPlease enter the Text to be hashed: ");
@@ -189,4 +191,7 @@ void readStringInput()
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
+  context = init_MD5_Context(context);
+
+  printf("context state 0 after init method: %x \n", context->state[0]);
 }
