@@ -20,6 +20,12 @@ static unsigned char PADDING[64] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+
+
+// C program function definitions, implementation and references towards end of file
+
+void init_MD5_Context(md5_context *context);
+
 uint32_t ROTATE_LEFT(uint32_t x, int n);
 
 void readStringInput();
@@ -29,6 +35,7 @@ void readFileInput();
 int getFileLineCount(char* fileName);
 
 
+// main function to run program
 int main(int argc, char *argv[])
 {
   int userOption;
@@ -66,6 +73,22 @@ int main(int argc, char *argv[])
   return 0;
 }
 
+
+// MD5 Data Structure initialization, Begins MD5 operation of writing a new context
+// https://www.ietf.org/rfc/rfc1321.txt -  page 10 
+void init_MD5_Context(md5_context *context)
+{
+  // initialize bit counts to 0
+  context->count[0] = 0;
+  context->count[1] = 0;
+
+  // initialize state constants
+  context->state[0] = 0x67452301;
+  context->state[1] = 0xefcdab89;
+  context->state[2] = 0x98badcfe;
+  context->state[3] = 0x10325476;
+
+}
 
 // rotate bits to left method definition from md5 standard
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10
