@@ -5,6 +5,10 @@
 // include md5 struct via header file so struct can be seen globally and not restricted to being first defined in main function
 #include "md5.h"
 
+// links that lead me to use struct in header file
+// https://stackoverflow.com/questions/8915230/invalid-application-of-sizeof-to-incomplete-type-with-a-struct
+// https://stackoverflow.com/questions/2576554/c-programming-dereferencing-pointer-to-incomplete-type-error
+
 
 // defined md5 padding constant, append 1 to end followed by 0's
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10
