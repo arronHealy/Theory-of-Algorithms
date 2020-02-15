@@ -31,18 +31,27 @@ int main(int argc, char *argv[])
   {
     printf("%02" PRIx8, b);
   }
+  
+  printf(" ");
 
   printf("%02" PRIx8, 0x80); // Bits: 1000 0000
+
+  printf(" ");
 
   for (uint64_t i = numOfZeroBytes(nobits); i > 0; i--)
   {
     printf("%02" PRIx8, 0x00);
   }
+  
+  printf(" ");
 
   printf("%016" PRIx64 "\n", nobits);
 
   printf("\n");
 
+  printf("nobits val is %" PRIu64 " \n", nobits);
+  
+  printf("numOfZeroBytes is %" PRIu64 " \n", numOfZeroBytes(nobits));
 
   fclose(inFile);
 

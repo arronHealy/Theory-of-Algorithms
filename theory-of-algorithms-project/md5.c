@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 // include md5 struct via header file so struct can be seen globally and not restricted to being first defined in main function
 #include "md5.h"
@@ -33,6 +34,8 @@ void readStringInput();
 void readFileInput();
 
 int getFileLineCount(char* fileName);
+
+int writeToFile(char* input);
 
 
 // main function to run program
@@ -183,7 +186,11 @@ void readFileInput()
 
 void readStringInput()
 {
+  int writeStatus;
+
   char* messageText;
+
+  char* hexText;
 
   struct md5_context *context = NULL;
 
@@ -195,7 +202,32 @@ void readStringInput()
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
-  context = init_MD5_Context(context);
+  writeStatus = writeToFile(messageText);
 
-  printf("context state 0 after init method: %x \n", context->state[0]);
+  if (writeStatus == 0)
+  {
+    return;
+  }
+  else
+  {
+    printf("string written to file!");
+  }
+
+}
+
+int writeToFile(char* input)
+{
+  FILE* textFile;
+  char filePath[] = "inputText.txt";
+
+  textFile = fopen(filePath, "w");
+
+  if (textFile == NULL)
+  {
+    printf("Error: could not store string input! Please try again.");
+    return 0;
+  }
+
+  fputs(input, textFile);
+  return 1;
 }
