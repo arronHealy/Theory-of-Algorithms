@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <inttypes.h>
 #include <string.h>
 
 // include md5 struct via header file so struct can be seen globally and not restricted to being first defined in main function
@@ -113,7 +113,7 @@ int getFileLineCount(char* fileName)
 
   if(file == NULL)
   {
-    printf("Error reading file %s, Please Try again...", fileName);
+    printf("\nError reading file %s, Please Try again...", fileName);
     return 0;
 
   }
@@ -160,7 +160,7 @@ void readFileInput()
 
   if(readFile == NULL)
   {
-    printf("Error reading file %s, Please Try again...", filePath);
+    printf("\nError reading file %s, Please Try again...", filePath);
     return;
 
   }
@@ -188,9 +188,17 @@ void readStringInput()
 {
   int writeStatus;
 
+  uint8_t bit;
+
+  uint64_t numBits;
+
+  int hexLength;
+
   char* messageText;
 
   char* hexText;
+  
+  FILE* inputFile;
 
   struct md5_context *context = NULL;
 
@@ -202,18 +210,56 @@ void readStringInput()
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
-  writeStatus = writeToFile(messageText);
+  hexText = (char*)malloc((strlen(messageText) * 2) * sizeof(char));
 
+  writeStatus = writeToFile(messageText);
+  
   if (writeStatus == 0)
   {
     return;
   }
   else
   {
-    printf("string written to file!");
-  }
+    printf("string written to file!\n");
+    free(messageText);  
+  }//if
 
-}
+
+  inputFile = fopen("inputText.txt", "rb");
+
+ 
+  if (inputFile == NULL)
+  {
+    printf("\nError: failed to access stored string input! Please try again.");
+    return;
+  }
+  else
+  {
+    printf("file opened!\n");
+
+    char hexBits[2];
+
+    for(numBits = 0; fread(&bit, 1, 1, inputFile) == 1; numBits +=8)
+    {
+      // write byte as hex to char array
+      sprintf(hexBits, "%02" PRIx8, bit);
+
+      printf("hex bits %s\n", hexBits);
+      
+      // concatenate to create hex representation of string input
+      strcat(hexText, hexBits);
+
+    }//for
+    
+    printf("hex text %s\n", hexText);
+    
+    printf("\nnumBits size is %" PRIu64 " \n", numBits);
+    
+    fclose(inputFile);
+  }//if
+  
+
+}//readFileInput
 
 int writeToFile(char* input)
 {
@@ -229,5 +275,8 @@ int writeToFile(char* input)
   }
 
   fputs(input, textFile);
+
+  fclose(textFile);
+
   return 1;
 }
