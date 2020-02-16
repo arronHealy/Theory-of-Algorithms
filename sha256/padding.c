@@ -4,6 +4,13 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+union block
+{
+  uint64_t sixfour[8];
+  uint32_t threetwo[16];
+  uint8_t eight[64];
+};
+
 
 uint64_t numOfZeroBytes(uint64_t nobits);
 
@@ -24,34 +31,35 @@ int main(int argc, char *argv[])
     return 1;
   }
   
-  uint8_t b;
   uint64_t nobits;
+  union block M;
+  uint8_t i;
 
-  for(nobits = 0; fread(&b, 1, 1, inFile) == 1; nobits += 8)
+  for(nobits = 0, i = 0; fread(&M.eight[i], 1, 1, inFile) == 1; nobits += 8)
   {
-    printf("%02" PRIx8, b);
+    printf("%02" PRIx8, M.eight[i]);
   }
   
-  printf(" ");
+  //printf(" ");
 
   printf("%02" PRIx8, 0x80); // Bits: 1000 0000
 
-  printf(" ");
+  //printf(" ");
 
   for (uint64_t i = numOfZeroBytes(nobits); i > 0; i--)
   {
     printf("%02" PRIx8, 0x00);
   }
   
-  printf(" ");
+  //printf(" ");
 
   printf("%016" PRIx64 "\n", nobits);
 
   printf("\n");
 
-  printf("nobits val is %" PRIu64 " \n", nobits);
+  //printf("nobits val is %" PRIu64 " \n", nobits);
   
-  printf("numOfZeroBytes is %" PRIu64 " \n", numOfZeroBytes(nobits));
+  //printf("numOfZeroBytes is %" PRIu64 " \n", numOfZeroBytes(nobits));
 
   fclose(inFile);
 
