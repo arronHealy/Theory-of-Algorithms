@@ -6,6 +6,7 @@ c-bit-operations/lookatbits_part2
 
 sha256/sha256
 sha256/padding
+sha256/unions
 
 theory-of-algorithms-project/md5
 

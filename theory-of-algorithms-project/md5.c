@@ -210,7 +210,7 @@ void readStringInput()
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
-  hexText = (char*)malloc((strlen(messageText) * 2) * sizeof(char));
+  hexText = (char*)malloc((strlen(messageText) * 2 + 1) * sizeof(char));
 
   writeStatus = writeToFile(messageText);
   
@@ -250,6 +250,12 @@ void readStringInput()
       strcat(hexText, hexBits);
 
     }//for
+    
+    // append 1 byte to string
+    sprintf(hexBits, "%02" PRIx8, PADDING[0]);
+    strcat(hexText, hexBits);
+
+
     
     printf("hex text %s\n", hexText);
     
