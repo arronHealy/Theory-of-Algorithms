@@ -201,6 +201,8 @@ void readStringInput()
   char* hexText;
    
   char* paddedText;
+  
+  char* paddedFinalText;
 
   FILE* inputFile;
 
@@ -270,17 +272,40 @@ void readStringInput()
     
     // concatenate hex string input
     strcat(paddedText, hexText);
-    
+
     // loop for number of bits to be added - 1 because one byte added already so message is 64 bits less than a multiple of 512
-    for(uint64_t i = 0; i <  numOfZeroBits(numBits) - 1; i++)
+    for(uint64_t i = 0; i < numOfZeroBits(numBits) - 1; i++)
     {
       sprintf(hexBits, "%02" PRIx8, PADDING[i + 1]);
 
       strcat(paddedText, hexBits);
     }
+    
+    // reuse messageText to store original length of message as hexidecimal to append to padded message
+    messageText = (char*)malloc(sizeof(hexText) * sizeof(char));
+    
+    // assign memory for final version of padded message
+    paddedFinalText = (char*)malloc((sizeof(paddedText) + 64) * sizeof(char));
 
-    printf("padded text is: %s\n", paddedText);
+    // write message length as 64 bits to hexidecimal
+    sprintf(messageText, "%016" PRIx64 , numBits);
 
+    printf("original message length as 64 bits: %s \n", messageText);
+    
+    // concatenate paddedText to paddedFinalText
+    strcat(paddedFinalText, paddedText);
+    //concatenate original message length as hexideciaml to paddedFinalText
+    strcat(paddedFinalText, messageText);
+
+    printf("padded text after all padding is: %s\n", paddedFinalText);
+
+    
+    // free memory once padding complete
+    free(hexText);
+    free(messageText);
+    free(paddedText);
+    
+    // close file before finished
     fclose(inputFile);
   }//if
   
