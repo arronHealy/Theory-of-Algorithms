@@ -37,6 +37,8 @@ int getFileLineCount(char* fileName);
 
 int writeToFile(char* input);
 
+uint64_t numOfZeroBits(uint64_t numBits);
+
 
 // main function to run program
 int main(int argc, char *argv[])
@@ -197,7 +199,9 @@ void readStringInput()
   char* messageText;
 
   char* hexText;
-  
+   
+  char* paddedText;
+
   FILE* inputFile;
 
   struct md5_context *context = NULL;
@@ -253,20 +257,38 @@ void readStringInput()
     
     // append 1 byte to string
     sprintf(hexBits, "%02" PRIx8, PADDING[0]);
-    strcat(hexText, hexBits);
-
-
+    strcat(hexText, hexBits); 
     
     printf("hex text %s\n", hexText);
     
     printf("\nnumBits size is %" PRIu64 " \n", numBits);
+
+    printf("\nnumBits to append to message: %" PRIu64 " \n", numOfZeroBits(numBits));
     
+    // assign memory for padded message by getting current hex message and adding number of bits to be added
+    paddedText = (char*)malloc(((sizeof(hexText) + numOfZeroBits(numBits))*2) * sizeof(char));  
+    
+    // concatenate hex string input
+    strcat(paddedText, hexText);
+    
+    // loop for number of bits to be added - 1 because one byte added already so message is 64 bits less than a multiple of 512
+    for(uint64_t i = 0; i <  numOfZeroBits(numBits) - 1; i++)
+    {
+      sprintf(hexBits, "%02" PRIx8, PADDING[i + 1]);
+
+      strcat(paddedText, hexBits);
+    }
+
+    printf("padded text is: %s\n", paddedText);
+
     fclose(inputFile);
   }//if
   
 
 }//readFileInput
 
+
+// write user input string to file, so itcan be read back in as binary and converted to hexidecimal
 int writeToFile(char* input)
 {
   FILE* textFile;
@@ -286,3 +308,18 @@ int writeToFile(char* input)
 
   return 1;
 }
+
+
+// code to check how many zero bits to append to message
+// stack overflow link to help with padding
+// https://crypto.stackexchange.com/questions/50836/md5-what-happens-if-message-is-exactly-64bit-block-size-message
+
+uint64_t numOfZeroBits(uint64_t numBits)
+{
+  uint64_t result = 448ULL - (numBits % 512ULL);
+
+  return (result / 8ULL);
+}
+
+
+
