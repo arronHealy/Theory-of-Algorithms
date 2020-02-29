@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 // Arron Healy
 // https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
@@ -14,7 +14,6 @@ union block
 enum flag {
   READ,
   PAD0,
-  PAD1,
   FINISH
 };
 
@@ -65,7 +64,7 @@ uint32_t sig1(uint32_t x);
 
 uint64_t numOfZeroBytes(uint64_t nobits);
 
-int nextblock(union block *M, FILE *inFile, uint64_t nobits, enum flag *status);
+int nextblock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status);
 
 void nexthash(union block *M, uint32_t *H);
 
@@ -100,16 +99,15 @@ int main(int argc, char *argv[])
   };
 
   // read through all of the padded message blocks
-  while(nextblock(&M, inFile, nobits, status))
+  while(nextblock(&M, inFile, &nobits, &status))
   {
     // calculate the next hash value
-    H = nexthash(&M, &H);
+    nexthash(&M, H);
   }
   
   for(int i = 0; i < 8; i++)
   {
     printf("%02" PRIx32, H[i]);
-    
   }
 
   printf("\n");
@@ -134,7 +132,7 @@ void nexthash(union block *M, uint32_t *H)
     W[t] = M->threetwo[t];
   }
 
-  for(t = 16 t < 64; t++)
+  for(t = 16; t < 64; t++)
   {
     W[t] = sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
   }
@@ -153,34 +151,56 @@ void nexthash(union block *M, uint32_t *H)
     H[0] = a + H[0]; H[1] = b + H[1]; H[2] = c + H[2];
     H[3] = d + H[3]; H[4] = e + H[4]; H[5] = f + H[5];
     H[6] = g + H[6]; H[7] = h + H[7];
-
-
     
   }
 }
 
 int nextblock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status)
 {
- 
-  uint8_t i;
-
-  for(*nobits = 0, i = 0; fread(&M.eight[i], 1, 1, inFile) == 1; *nobits += 8)
+  if (*status == FINISH)
   {
-    printf("%02" PRIx8, M.eight[i]);
+    return 0;
   }
-  
 
-  printf("%02" PRIx8, 0x80); // Bits: 1000 0000
-
-
-  for (uint64_t i = numOfZeroBytes(*nobits); i > 0; i--)
+  if (*status == PAD0)
   {
-    printf("%02" PRIx8, 0x00);
+    for (int i = 0; i < 56; i++)
+    {
+      M->eight[i] = 0;
+    }
+    M->sixfour[7] = *nobits;
+    *status = FINISH;
+    return 1;
   }
+
+  size_t nobytesread = fread(M->eight, 1, 64, inFile);
   
+  if (nobytesread == 64)
+  {
+    return 1;
+  }
 
-  printf("%016" PRIx64 "\n", *nobits);
+  // if we can fit all padding in last block, then do!
+  if (nobytesread < 56)
+  {
+    M->eight[nobytesread] = 0x80;
+    for (int i = nobytesread + 1; i < 56; i++)
+    {
+      M->eight[i] = 0;
+    }
+    M->sixfour[7] = *nobits;
+    *status = FINISH;
+    return 1;
+  } 
 
+  // Otherwise we have read between 54 (inclusive) and 64 (exclusive) bytes
+  M->eight[nobytesread] = 0x80;
+  for (int i = nobytesread + 1; i < 64; i++)
+  {
+    M->eight[i] = 0;
+  }
+  *status = PAD0;
+  return 1;
 
 }
 
