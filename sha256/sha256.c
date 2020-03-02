@@ -175,14 +175,18 @@ int nextblock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status)
 
   size_t nobytesread = fread(M->eight, 1, 64, inFile);
   
+  printf("nobytesread is %zu \n", nobytesread);
+
   if (nobytesread == 64)
   {
+    printf("nobytesread == 64\n");
     return 1;
   }
 
   // if we can fit all padding in last block, then do!
   if (nobytesread < 56)
   {
+    printf("nobytesread < 56\n");
     M->eight[nobytesread] = 0x80;
     for (int i = nobytesread + 1; i < 56; i++)
     {
@@ -194,6 +198,7 @@ int nextblock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status)
   } 
 
   // Otherwise we have read between 54 (inclusive) and 64 (exclusive) bytes
+  printf("nobytesread set PAD0\n");
   M->eight[nobytesread] = 0x80;
   for (int i = nobytesread + 1; i < 64; i++)
   {

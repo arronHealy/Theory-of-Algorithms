@@ -11,6 +11,24 @@
 // https://stackoverflow.com/questions/2576554/c-programming-dereferencing-pointer-to-incomplete-type-error
 
 
+#define S11 7
+#define S12 12
+#define S13 17
+#define S14 22
+#define S21 5
+#define S22 9
+#define S23 14
+#define S24 20
+#define S31 4
+#define S32 11
+#define S33 16
+#define S34 23
+#define S41 6
+#define S42 10
+#define S43 15
+#define S44 21
+
+
 // defined md5 padding constant, append 1 to end followed by 0's
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10
 static unsigned char PADDING[64] = {
@@ -21,9 +39,36 @@ static unsigned char PADDING[64] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+union block
+{
+  uint64_t sixfour[8];
+  uint32_t threetwo[16];
+  uint8_t eight[64];
+};
 
+enum flag {
+  READ,
+  PAD0,
+  FINISH
+};
 
 // C program function definitions, implementation and references towards end of file
+void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+
+void GG(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+
+void HH(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+
+void II(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+
+
+uint32_t F(uint32_t x, uint32_t y, uint32_t z);
+
+uint32_t G(uint32_t x, uint32_t y, uint32_t z);
+
+uint32_t H(uint32_t x, uint32_t y, uint32_t z);
+
+uint32_t I(uint32_t x, uint32_t y, uint32_t z);
 
 struct md5_context* init_MD5_Context(struct md5_context *context);
 
@@ -39,6 +84,9 @@ int writeToFile(char* input);
 
 uint64_t numOfZeroBits(uint64_t numBits);
 
+char* getPaddedMessage(char* message);
+
+int nextBlock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status);
 
 // main function to run program
 int main(int argc, char *argv[])
@@ -190,6 +238,12 @@ void readStringInput()
 {
   int writeStatus;
 
+  union block M;
+
+  uint64_t nobits = 0;
+
+  enum flag status = READ;
+
   uint8_t bit;
 
   uint64_t numBits;
@@ -216,17 +270,18 @@ void readStringInput()
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
-  hexText = (char*)malloc((strlen(messageText) * 2 + 1) * sizeof(char));
+  // hexText = (char*)malloc((strlen(messageText) * 2 + 1) * sizeof(char));
 
   writeStatus = writeToFile(messageText);
   
   if (writeStatus == 0)
   {
+    printf("Error writing string to file! Please try again.\n");
     return;
   }
   else
   {
-    printf("string written to file!\n");
+    printf("String written to file!\n");
     free(messageText);  
   }//if
 
@@ -243,6 +298,26 @@ void readStringInput()
   {
     printf("file opened!\n");
 
+    context = init_MD5_Context(context);
+
+    printf("context value: %x \n", context->state[0]);
+
+    //size_t numBytesRead = fread(context->buffer, 1, 64, inputFile);
+
+   // printf("size num bytes read: %zu \n", numBytesRead);    
+   
+   while(nextBlock(&M, inputFile, &nobits, &status))
+   {
+    printf("next block\n");
+   }
+  
+   for (uint8_t i = 0; i < 64; i++)
+    printf("%" PRIu8 " ", M.eight[i]);
+   
+   
+   //for(int i = 0; i < 64; i++)
+      //printf("context buffer val %c \n", context->buffer[i]);
+    /*
     char hexBits[2];
 
     for(numBits = 0; fread(&bit, 1, 1, inputFile) == 1; numBits +=8)
@@ -304,7 +379,10 @@ void readStringInput()
     free(hexText);
     free(messageText);
     free(paddedText);
-    
+    */
+
+
+
     // close file before finished
     fclose(inputFile);
   }//if
@@ -312,6 +390,53 @@ void readStringInput()
 
 }//readFileInput
 
+
+int nextBlock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status)
+{
+ if (*status == FINISH)
+ {
+  return 0;
+ }
+
+ if (*status == PAD0)
+ {
+  for (int i = 0; i < 56; i++)
+  {
+    M->eight[i] = 0;
+  }
+
+  M->sixfour[7] = *nobits;
+  *status = FINISH;
+  return 1;
+ }
+
+ size_t nobytesread = fread(M->eight, 1, 64, inFile);
+
+ if (nobytesread == 64)
+ {
+  return 1;
+ }
+
+ if (nobytesread < 56)
+ {
+    M->eight[nobytesread] = 0x80;
+    for(int i = nobytesread + 1; i < 56; i++)
+    {
+      M->eight[i] = 0;
+    }
+    M->sixfour[7] = *nobits;
+    *status = FINISH;
+    return 1;
+ }
+
+ M->eight[nobytesread] = 0x80;
+ for (int i = nobytesread + 1; i < 64; i++)
+ {
+    M->eight[i] = 0;
+ }
+ *status = PAD0;
+ return 1;
+}
 
 // write user input string to file, so itcan be read back in as binary and converted to hexidecimal
 int writeToFile(char* input)
@@ -346,5 +471,54 @@ uint64_t numOfZeroBits(uint64_t numBits)
   return (result / 8ULL);
 }
 
+void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+{
+  a += F(b, c, d) + x + ac;
+  a = ROTATE_LEFT(a, s);
+  a += b;
+}
 
+void GG(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+{
+  a += G(b, c, d) + x + ac;
+  a = ROTATE_LEFT(a, s);
+  a += b;
+}
+
+void HH(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+{
+  a += H(b, c, d) + x + ac;
+  a = ROTATE_LEFT(a, s);
+  a += b;
+}
+
+void II(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+{
+  a += I(b, c, d) + x + ac;
+  a = ROTATE_LEFT(a, s);
+  a += b;
+}
+
+uint32_t F(uint32_t x, uint32_t y, uint32_t z)
+{
+  return (x & y) | ((~x) & z);
+}
+
+
+uint32_t G(uint32_t x, uint32_t y, uint32_t z)
+{
+  return (x & z) | (y & (~z));
+}
+
+
+uint32_t H(uint32_t x, uint32_t y, uint32_t z)
+{
+  return ((x) ^ (y) ^ (z));
+}
+
+
+uint32_t I(uint32_t x, uint32_t y, uint32_t z)
+{
+  return y ^ (x | (~z));
+}
 
