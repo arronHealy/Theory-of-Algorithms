@@ -8,6 +8,8 @@ sha256/sha256
 sha256/padding
 sha256/unions
 sha256/refactor
+sha256/refactor2
+sha256/endian
 
 theory-of-algorithms-project/md5
 
