@@ -2,6 +2,8 @@
 // https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
 // The Secure Hash Algorithm 256-bit version.
 
+// Taken from https://github.com/ianmcloughlin/sha256
+
 #include <stdio.h>
 #include <inttypes.h>
 #include <endian.h>

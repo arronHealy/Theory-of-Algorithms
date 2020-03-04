@@ -8,6 +8,16 @@
 // definition of a word - Section 2.1
 #define WORD uint32_t
 
+// https://helloacm.com/how-to-find-out-whether-a-machine-is-big-endian-or-little-endian-in-cc/
+#define BIG_ENDIAN 0
+#define LITTLE_ENDIAN 1
+ 
+int TestByteOrder() {
+        short int word = 0x0001;
+        char *b = (char *)&word;
+        return (b[0] ? LITTLE_ENDIAN : BIG_ENDIAN);
+}
+
 // A 64 byte block in memory, accessed with different types
 union block {
     uint64_t sixfour[8];
@@ -22,6 +32,15 @@ enum flag
     PAD0,
     FINISH
 };
+
+// check if machine big or little endian
+enum _endian
+{
+    BIG,
+    LITTLE
+};
+
+enum _endian endian = BIG;
 
 // Section 4.2.2
 const WORD K[] = {
@@ -276,6 +295,10 @@ int main(int argc, char *argv[])
     uint64_t nobits = 0;
 
     enum flag status = READ;
+
+    // test whether machine is little or big endian
+    int r = TestByteOrder();
+    printf("%s\n", r == LITTLE_ENDIAN ? "Little Endian" : "Big Endian");
 
     // Section 5.3.3
     WORD H[] = {
