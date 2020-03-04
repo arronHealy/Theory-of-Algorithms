@@ -84,7 +84,6 @@ int writeToFile(char* input);
 
 uint64_t numOfZeroBits(uint64_t numBits);
 
-char* getPaddedMessage(char* message);
 
 int nextBlock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status);
 
