@@ -4,90 +4,19 @@
 #include <string.h>
 #include <byteswap.h>
 
-// include md5 struct via header file so struct can be seen globally and not restricted to being first defined in main function
+// include md5 definitions via header file so variables can be seen globally and not restricted to being first defined in main function
 #include "md5.h"
 
-// links that lead me to use struct in header file
+// links that lead me to use header file
 // https://stackoverflow.com/questions/8915230/invalid-application-of-sizeof-to-incomplete-type-with-a-struct
 // https://stackoverflow.com/questions/2576554/c-programming-dereferencing-pointer-to-incomplete-type-error
-
-
-#define S11 7
-#define S12 12
-#define S13 17
-#define S14 22
-#define S21 5
-#define S22 9
-#define S23 14
-#define S24 20
-#define S31 4
-#define S32 11
-#define S33 16
-#define S34 23
-#define S41 6
-#define S42 10
-#define S43 15
-#define S44 21
-
-// word as 32 bit integer
-#define WORD uint32_t
-
-// rotate bits to left method definition from md5 standard
-// https://www.ietf.org/rfc/rfc1321.txt -  page 10
-#define ROTL(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
-
-// hash functions
-#define F(x, y, z) ((x & y) | (~x & z))
-
-#define G(x, y, z) ((x & z) | (y & ~z))
-
-#define H(x, y, z) (x ^ y ^ z)
-
-#define I(x, y, z) (y ^ (x | ~z))
-
-union block
-{
-  uint64_t sixfour[8];
-  uint32_t threetwo[16];
-  uint8_t eight[64];
-};
-
-enum flag {
-  READ,
-  PAD0,
-  FINISH
-};
-
-// C program function definitions, implementation and references towards end of file
-void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
-
-void GG(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
-
-void HH(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
-
-void II(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
-
-void readStringInput();
-
-void readFileInput();
-
-int getFileLineCount(char* fileName);
-
-int writeToFile(char* input);
-
-uint64_t numOfZeroBits(uint64_t numBits);
-
-
-int nextBlock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status);
-
-void nexthash(union block *M, uint32_t *H);
 
 // main function to run program
 int main(int argc, char *argv[])
 {
   int userOption;
   
-  printf("\nMD5 Hash Function");
+  printf("\nMD5 Cryptographic Hash Function Generator");
   printf("\nEnter -1 to exit the program!");
   printf("\nEnter 1 if you wish to enter Text to be hashed");
   printf("\nEnter 2 if you wish the contents of a file to be hashed");
@@ -120,74 +49,60 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-/*
-// MD5 Data Structure initialization, Begins MD5 operation of writing a new context
-// https://www.ietf.org/rfc/rfc1321.txt -  page 10 
-struct md5_context* init_MD5_Context(struct md5_context *context)
-{
-  context = (struct md5_context*)malloc(sizeof(struct md5_context));
-
-  // initialize bit counts to 0
-  context->count[0] = 0;
-  context->count[1] = 0;
-
-  // initialize state constants
-  context->state[0] = 0x67452301;
-  context->state[1] = 0xefcdab89;
-  context->state[2] = 0x98badcfe;
-  context->state[3] = 0x10325476;
-
-  return context;
-}
-
- 
-// rotate bits to left method definition from md5 standard
-// https://www.ietf.org/rfc/rfc1321.txt -  page 10
-uint32_t ROTATE_LEFT(uint32_t x, int n)
-{
-  return ((x << n) | (x >> (32 - n)));
-}
-*/
-
 void readFileInput()
 {
   char* filePath;
+  
   FILE* readFile;
 
-  int pos = 0;
+  union BLOCK M;
 
-  int fileLineCount = 0;
+  uint64_t nobits = 0;
 
-  // md5_context *context;
+  enum FLAG status = READ;
 
-  filePath = (char*)malloc(30 * sizeof(char));
+  // initialization of md5 context hash constants
+  // https://www.ietf.org/rfc/rfc1321.txt - page 11
+  WORD H[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+  // allocate memory for string input
+  filePath = (char*)malloc(50 * sizeof(char));
   
+  // prompt user for string
   printf("\nEnter the File path you wish to read: ");
   scanf("%s", filePath);
 
-  
-  readFile = fopen(filePath, "r");
+  // read file contents as binary data
+  readFile = fopen(filePath, "rb");
 
+  // try and access file
   if(readFile == NULL)
   {
     printf("\nError reading file %s, Please Try again...", filePath);
     return;
-
   }
   else
   {
-    char testTexts[fileLineCount - 1][30];
+    printf("file opened!\n");
+    // free memory used for string
+    free(filePath);
 
-    while(fscanf(readFile, "%s", testTexts[pos]) == 1)
-    {
+   // loop for file contents and perform padding &hashing functions
+   while(nextBlock(&M, readFile, &nobits, &status))
+   {
+      nexthash(&M, H);
+   }
 
-      printf("\nFile text at pos %d is: %s", pos, testTexts[pos]);
-      printf("\n");
-      
+   printf("\n");
 
-      pos++;
-    }
+   // loop for size of H and print MD5 Hash after transformations
+   for (int i = 0; i < 4; i++)
+   {
+     // print MD5 hash in Big endian
+     printf("%08" PRIx32 "", bswap_32(H[i]));
+   }
 
+    // close file before exiting function
     fclose(readFile);
   }
   
@@ -198,26 +113,31 @@ void readStringInput()
 {
   int writeStatus;
 
-  union block M;
+  union BLOCK M;
 
   uint64_t nobits = 0;
 
-  enum flag status = READ;
+  enum FLAG status = READ;
 
   char* messageText;
 
   FILE* inputFile;
 
-  struct md5_context *context = NULL;
+  // initialization of md5 context hash constants
+  // https://www.ietf.org/rfc/rfc1321.txt - page 11
+  WORD H[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
 
-  messageText = (char*)malloc(30 * sizeof(char));
+  // allocate memory for string input
+  messageText = (char*)malloc(50 * sizeof(char));
  
+  // prompt user for string input
   printf("\nPlease enter the Text to be hashed: ");
   scanf("%s", messageText);
 
   printf("Entered Text is: %s", messageText);
   printf("\n");
 
+  // try and write string input to file
   writeStatus = writeToFile(messageText);
   
   if (writeStatus == 0)
@@ -227,11 +147,11 @@ void readStringInput()
   }
   else
   {
-    printf("String written to file!\n");
+    // free memory of string input if written to file
     free(messageText);  
   }//if
 
-
+  // read file contents as binary data
   inputFile = fopen("inputText.txt", "rb");
 
  
@@ -244,35 +164,20 @@ void readStringInput()
   {
     printf("file opened!\n");
 
-      
-   WORD H[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+    // loop for file contents and perform padding &hashing functions
+    while(nextBlock(&M, inputFile, &nobits, &status))
+    {
+        nexthash(&M, H);
+    }
 
+    printf("\n");
 
-   while(nextBlock(&M, inputFile, &nobits, &status))
-   {
-      //printf("next block\n");
-      nexthash(&M, H);
-   }
-
-   for(uint8_t i = 0; i < 64; i++)
-   {
-     printf("%02" PRIx8 "", M.eight[i]);
-   }
-
-   printf("\n");
-
-   for(uint8_t i = 0; i < 64; i++)
-   {
-     printf("%02" PRIu8 " ", M.eight[i]);
-   }
-
-   printf("\n");
-
-   for (int i = 0; i < 4; i++)
-   {
-     printf("%08" PRIx32 "", bswap_32(H[i]));
-     //printf("%02x%02x%02x%02x", (H[i] >> 0) & 0xFF, (H[i] >> 8) & 0xFF, (H[i] >> 16) & 0xFF, (H[i] >> 24) & 0xFF);
-   }
+    // loop for size of H and print MD5 Hash after transformations
+    for (int i = 0; i < 4; i++)
+    {
+      // print MD5 hash in Big endian
+      printf("%08" PRIx32 "", bswap_32(H[i]));
+    }
   
     // close file before finished
     fclose(inputFile);
@@ -282,8 +187,11 @@ void readStringInput()
 }//readFileInput
 
 
-void nexthash(union block *M, uint32_t *H)
+void nexthash(union BLOCK *M, uint32_t *H)
 {
+  // perform MD5 hash transformation function
+  // https://www.ietf.org/rfc/rfc1321.txt - pages 13&14
+
   uint32_t a = H[0], b = H[1], c = H[2], d = H[3];
 
   /* Round 1 */
@@ -358,10 +266,6 @@ void nexthash(union block *M, uint32_t *H)
   II(&H[2], H[3], H[0], H[1], M->threetwo[2], S43, 0x2ad7d2bb); /*63*/
   II(&H[1], H[2], H[3], H[0], M->threetwo[9], S44, 0xeb86d391); /*64*/
 
-  printf("a = %08" PRIx32 "\n", H[0]);
-  printf("b = %08" PRIx32 "\n", H[1]);
-  printf("c = %08" PRIx32 "\n", H[2]);
-  printf("d = %08" PRIx32 "\n", H[3]);
 
   H[0] += a;
   H[1] += b;
@@ -371,67 +275,86 @@ void nexthash(union block *M, uint32_t *H)
     
 }
 
-int nextBlock(union block *M, FILE *inFile, uint64_t *nobits, enum flag *status)
+int nextBlock(union BLOCK *M, FILE *inFile, uint64_t *nobits, enum FLAG *status)
 {
   int i;
 
- if (*status == FINISH)
- {
-  return 0;
- }
+  size_t nobytesread;
 
- if (*status == PAD0)
- {
-  for (i = 0; i < 56; i++)
+  switch(*status)
   {
-    M->eight[i] = 0x00;
-  }
+    case FINISH:
+      // padding of message is complete end loop 
+      return 0;
+    case PAD0:
+      // pad message with 56 bytes or 448 bits with all 0's with 64 bits remaining  
+      for (i = 0; i < 56; i++)
+      {
+        M->eight[i] = 0x00;
+      }
 
-  M->sixfour[7] = *nobits;
-  *status = FINISH;
+      // https://www.ietf.org/rfc/rfc1321.txt - page 3
+      // section 3.2
+      // append original message length in 64 bit format to end of padded message
+      // original message length added as little-endian format
+      // https://stackoverflow.com/questions/48818204/implementing-md5-inconsistent-endianness
+      
+      M->sixfour[7] = *nobits;
+
+      // padding complete set status to FINISH to stop anymore padding of message
+      *status = FINISH;
+      break;
+    default:
+      // try and read 64 bytes or 512 bits from the file
+      nobytesread = fread(M->eight, 1, 64, inFile);
+      // keep track of number of bits read from the file
+      *nobits += (8ULL * ((uint64_t) nobytesread));
+
+      // if nobytes read less than 64 we can put all padding in this block
+      if (nobytesread < 56)
+      {
+          // append the 1 bit to message
+          // https://www.ietf.org/rfc/rfc1321.txt - page 3
+          // section 3.1
+          M->eight[nobytesread] = 0x80;
+
+          // pad message with 56 bytes or 448 bits with all 0's with 64 bits remaining
+          // https://www.ietf.org/rfc/rfc1321.txt - page 3
+          // section 3.1
+          for(i = nobytesread + 1; i < 56; i++)
+          {
+            M->eight[i] = 0x00;
+          }
+
+          // https://www.ietf.org/rfc/rfc1321.txt - page 3
+          // section 3.2
+          // append original message length in 64 bit format to end of padded message
+          // original message length added as little-endian format
+          // https://stackoverflow.com/questions/48818204/implementing-md5-inconsistent-endianness
+          
+          M->sixfour[7] = *nobits;
+          
+          // padding complete set status to FINISH to stop anymore padding of message
+          *status = FINISH;
+          return 1;
+      }
+      else if(nobytesread < 64)
+      {
+        M->eight[nobytesread] = 0x80;
+        for (i = nobytesread + 1; i < 64; i++)
+        {
+            M->eight[i] = 0x00;
+        }
+        
+        *status = PAD0;
+      }
+
+  }//end switch
+
   return 1;
- }
-
- size_t nobytesread = fread(M->eight, 1, 64, inFile);
- *nobits += (8ULL * ((uint64_t) nobytesread));
-
- if (nobytesread == 64)
- {
-   
-   for (i = 0; i < 16; i++)
-   {
-     M->threetwo[i] = bswap_32(M->threetwo[i]);
-   }
-   
-   
-  
-  return 1;
- }
-
- if (nobytesread < 56)
- {
-    M->eight[nobytesread] = 0x80;
-    for(i = nobytesread + 1; i < 56; i++)
-    {
-      M->eight[i] = 0x00;
-    }
-
-    M->sixfour[7] = *nobits;
-    *status = FINISH;
-    return 1;
- }
-
- M->eight[nobytesread] = 0x80;
- for (i = nobytesread + 1; i < 64; i++)
- {
-    M->eight[i] = 0;
- }
- 
- *status = PAD0;
- return 1;
 }
 
-// write user input string to file, so itcan be read back in as binary and converted to hexidecimal
+// write user input string to file, so it can be read back in as binary and converted to hexidecimal
 int writeToFile(char* input)
 {
   FILE* textFile;
@@ -453,16 +376,10 @@ int writeToFile(char* input)
 }
 
 
-// code to check how many zero bits to append to message
-// stack overflow link to help with padding
-// https://crypto.stackexchange.com/questions/50836/md5-what-happens-if-message-is-exactly-64bit-block-size-message
+// FF, GG, HH, and II transformation functions for rounds 1, 2, 3, and 4.
+// Rotation is separate from addition to prevent recomputation.
+// https://www.ietf.org/rfc/rfc1321.txt - pages 10 & 11
 
-uint64_t numOfZeroBits(uint64_t numBits)
-{
-  uint64_t result = 448ULL - (numBits % 512ULL);
-
-  return (result / 8ULL);
-}
 
 void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
 {
