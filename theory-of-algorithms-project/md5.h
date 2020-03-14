@@ -28,7 +28,7 @@
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10
 #define ROTL(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
 
-// c macro hash functions
+// c macro hash function Bit shift
 // https://www.ietf.org/rfc/rfc1321.txt -  page 10
 #define F(x, y, z) ((x & y) | (~x & z))
 
@@ -44,7 +44,7 @@
 typedef union
 {
   uint64_t sixfour[8];
-  uint32_t threetwo[16];
+  WORD threetwo[16];
   uint8_t eight[64];
 } BLOCK;
 
@@ -56,13 +56,13 @@ typedef enum {
 } FLAG;
 
 // md5.c program function definitions
-void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+void FF(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac);
 
-void GG(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+void GG(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac);
 
-void HH(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+void HH(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac);
 
-void II(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac);
+void II(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac);
 
 void readStringInput();
 
@@ -70,6 +70,6 @@ void readFileInput();
 
 int writeToFile(char* input);
 
-int nextBlock(union BLOCK *M, FILE *inFile, uint64_t *nobits, enum FLAG *status);
+int nextBlock(BLOCK *M, FILE *inFile, uint64_t *nobits, FLAG *status);
 
-void nexthash(union BLOCK *M, uint32_t *H);
+void nexthash(BLOCK *M, WORD *H);

@@ -15,13 +15,12 @@
 int main(int argc, char *argv[])
 {
   int userOption;
-  
-  printf("\nMD5 Cryptographic Hash Function Generator");
-  printf("\nEnter -1 to exit the program!");
-  printf("\nEnter 1 if you wish to enter Text to be hashed");
-  printf("\nEnter 2 if you wish the contents of a file to be hashed");
  
   do{
+       printf("\n\nMD5 Cryptographic Hash Function Generator");
+       printf("\nEnter -1 to exit the program!");
+       printf("\nEnter 1 if you wish to enter Text to be hashed");
+       printf("\nEnter 2 if you wish the contents of a file to be hashed");
        printf("\nEnter option: ");
        scanf("%d", &userOption);
 
@@ -55,11 +54,11 @@ void readFileInput()
   
   FILE* readFile;
 
-  union BLOCK M;
+  BLOCK M;
 
   uint64_t nobits = 0;
 
-  enum FLAG status = READ;
+  FLAG status = READ;
 
   // initialization of md5 context hash constants
   // https://www.ietf.org/rfc/rfc1321.txt - page 11
@@ -93,7 +92,7 @@ void readFileInput()
       nexthash(&M, H);
    }
 
-   printf("\n");
+   printf("\nMD5 Generated Hash:\n");
 
    // loop for size of H and print MD5 Hash after transformations
    for (int i = 0; i < 4; i++)
@@ -113,11 +112,11 @@ void readStringInput()
 {
   int writeStatus;
 
-  union BLOCK M;
+  BLOCK M;
 
   uint64_t nobits = 0;
 
-  enum FLAG status = READ;
+  FLAG status = READ;
 
   char* messageText;
 
@@ -170,7 +169,7 @@ void readStringInput()
         nexthash(&M, H);
     }
 
-    printf("\n");
+    printf("\nMD5 Generated Hash:\n");
 
     // loop for size of H and print MD5 Hash after transformations
     for (int i = 0; i < 4; i++)
@@ -187,12 +186,12 @@ void readStringInput()
 }//readFileInput
 
 
-void nexthash(union BLOCK *M, uint32_t *H)
+void nexthash(BLOCK *M, WORD *H)
 {
   // perform MD5 hash transformation function
   // https://www.ietf.org/rfc/rfc1321.txt - pages 13&14
 
-  uint32_t a = H[0], b = H[1], c = H[2], d = H[3];
+  WORD a = H[0], b = H[1], c = H[2], d = H[3];
 
   /* Round 1 */
   FF(&H[0], H[1], H[2], H[3], M->threetwo[0], S11, 0xd76aa478); /*1*/
@@ -275,7 +274,7 @@ void nexthash(union BLOCK *M, uint32_t *H)
     
 }
 
-int nextBlock(union BLOCK *M, FILE *inFile, uint64_t *nobits, enum FLAG *status)
+int nextBlock(BLOCK *M, FILE *inFile, uint64_t *nobits, FLAG *status)
 {
   int i;
 
@@ -381,25 +380,25 @@ int writeToFile(char* input)
 // https://www.ietf.org/rfc/rfc1321.txt - pages 10 & 11
 
 
-void FF(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+void FF(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac)
 {
   *a += F(b, c, d) + x + ac;
   *a = b + ROTL(*a, s);
 }
 
-void GG(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+void GG(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac)
 {
   *a += G(b, c, d) + x + ac;
   *a = b + ROTL(*a, s);
 }
 
-void HH(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+void HH(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac)
 {
   *a += H(b, c, d) + x + ac;
   *a = b + ROTL(*a, s);
 }
 
-void II(uint32_t *a, uint32_t b, uint32_t c, uint32_t d, uint32_t x, uint32_t s, uint32_t ac)
+void II(WORD *a, WORD b, WORD c, WORD d, WORD x, WORD s, WORD ac)
 {
   *a += I(b, c, d) + x + ac;
   *a = b + ROTL(*a, s);
