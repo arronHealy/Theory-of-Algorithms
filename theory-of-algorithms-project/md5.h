@@ -73,3 +73,15 @@ int writeToFile(char* input);
 int nextBlock(BLOCK *M, FILE *inFile, uint64_t *nobits, FLAG *status);
 
 void nexthash(BLOCK *M, WORD *H);
+
+
+// md5.c cmocka unit test definitions
+void TESTCASE_nexthash_equals(void **state);
+
+void TESTCASE_FF_ROUND_ONE_equals(void **state);
+
+void TESTCASE_GG_ROUND_TWO_equals(void **state);
+
+void TESTCASE_HH_ROUND_THREE_equals(void **state);
+
+void TESTCASE_II_ROUND_FOUR_equals(void **state);
