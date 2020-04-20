@@ -30,10 +30,30 @@ The c-bit-operations folder contains C program files that were developed as part
 
 * <b>sha256:</b>
 
-The sha256 folder contains code written in C that was developed over the last few videos in the series as a side project where we developed the sha256 hashing algorithm. In the README.md for this repository a link is provided to the main source used in the development of this algorithm along with some example testing output presented to show the reader the contents of a file after it has been processed by the program and comparing it with the openssl's version of the sha256.  
+The sha256 folder contains code written in C that was developed over the last few videos in the series as a side project where we developed the sha256 hashing algorithm. In the README.md for this repository a link is provided to the main source used in the development of this algorithm along with some example testing output presented to show the reader the contents of a file after it has been processed by the program and comparing it with the output of openssl's version of the sha256 algorithm.  
 
 
-## The Main Project Code
+## The Main Project 
+
+The main project for the Theory of Algorithms module was to write a program in C to perform the MD5 message-digest algorithm. The main source used to develop this algorithm is specified in the [Request For Comments 1321 document supplied by the Internet Engineering Task Force.](https://tools.ietf.org/html/rfc1321)
+
+The code developed to implement the MD5 message-digest algorithm for this project can be found in the <i>theory-of-algorithms-project</i> folder. The description of the algorithm and steps that are involved to successfully implement the MD5 message-digest algorithm are explained in the README.md file of this repository. The following will be a breakdown of the files contained within the project folder:
+
+* <b>md5.h:</b>
+
+The md5.h file of this folder is a header file that contains all the constants, pre-processor macro functions, global variables and function definitions for the md5.c file. Header files are commonly used when writing C programs which is evident when including files such as <b>stdio.h</b> or <b>stdlib.h</b>. In doing this you can leave the file in which your main function resides a lot more neat and tidy, another advantage in doing this is that by declaring global variables in this file your main program can use them throughout the program whereas otherwise these variables would have to be first defined in your main function.
+
+* <b>md5.c:</b>
+
+The md5.c file contains the logic and function implementations that went into successfully writing the MD5 message-digest algorithm. The program takes command line arguments on execution of the program and depending on the argument performs a different operation which will be explained in the next section. On execution of the program the user will have the option to either perform the MD5 algorithm on either a string input or a file path that is entered from a command line prompt. The md5.c file along with the functions written to perform the MD5 algorithm also contains testcase functions that were developed using the [cmocka](https://api.cmocka.org/) unit testing framework for C. This framework will be detailed further in the following sections.
+
+* <b>empty:</b>
+
+This an empty file that was created when testing the algorithm. When performing the MD5 operation on an input the empty string or file in this case is still considered a valid input and can be used as a good benchmark to assert your algorithm is correct.
+
+* <b>inputText.txt:</b>
+
+This file is used as part of the program when the user chooses to input a string. The program takes the user input writes it to this file and then proceeds to read the file contents as binary data and then perform the MD5 algorithm to output the correct hash value for a given input. 
 
 
 # Run
