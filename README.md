@@ -1,3 +1,6 @@
+## Note: For updated instructions on running the code in this repository, refer to overview.md file
+
+
 # Theory-of-Algorithms
 
 This Repository contains the project submission for my 4th year Computing in Software Development module in GMIT, Theory of Algorithms. The following sections give an more in depth explanation about this repository and the project specification.
