@@ -72,12 +72,12 @@ I(X,Y,Z) = Y xor (X and not(Z))
 This step uses a 64-element table T[1 ... 64] constructed from the sine function. Let T[i] denote the i-th element of the table, which is equal to the integer part of 4294967296 times abs(sin(i)), where i is in radians. Each 512 bit block undergoes 4 rounds of calculations where each round has 16 steps.
 
 ```
-Save A as AA, B as BB, C as CC, and D as DD.
+Save a as aa, b as bb, c as cc, and d as dd.
 
-AA = A
-BB = B
-CC = C
-DD = D
+aa = a
+bb = b
+cc = c
+dd = d
      
 /* Round 1 */
   FF (a, b, c, d, x[ 0], S11, 0xd76aa478); /* 1 */
@@ -153,10 +153,10 @@ DD = D
   
 Then perform the following additions. (That is increment each of the four registers by the value it had before this block was started.)
    
- A = A + AA
- B = B + BB
- C = C + CC
- D = D + DD
+ a = a + aa
+ b = b + bb
+ c = c + cc
+ d = d + dd
 ```
 # Step 5: Output the message
 
@@ -205,7 +205,7 @@ Assuming that command executed without any error messages showing which it shoul
 ./md5
 ```
 
-If you the program executed correctly you should see this output in your terminal window.
+If the program executed correctly you should see this output in your terminal window.
 
 ```
 MD5 Cryptographic Hash Function Generator
