@@ -56,7 +56,31 @@ This an empty file that was created when testing the algorithm. When performing 
 This file is used as part of the program when the user chooses to input a string. The program takes the user input writes it to this file and then proceeds to read the file contents as binary data and then perform the MD5 algorithm to output the correct hash value for a given input. 
 
 
-# Run
+# Running the Program
+
+In this section of this document I will go over the updated steps in running this program since adding a unit testing framework to the project. As previously stated the development of this project was mainly done in a Linux environment with some local work done using Windows sub-system for Linux. So in the interests of both parties I will go over the installation of Windows sub-system for Linux and once this is complete go over the instructions of installing the C compiler along with the instructions for installing the cmocka unit testing framework. If you are already operating in a Linux environment feel free to skip ahead.
+
+## Windows sub-system for Linux
+
+If you would like to follow Microsofts instructions for installation, [follow this link](https://docs.microsoft.com/en-us/windows/wsl/install-win10). Otherwise continue as instructed.
+
+Before installation you must ensure the optional feature is enabled:
+
+1. Open Windows Poweshell as administrator and run this command
+
+```
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+```
+
+2. Restart computer when prompted.
+
+<br>
+
+If both previous steps were successful the next step is to download your Linux distro. The Linux system used for the development of this project was Ubuntu 18.04.
+
+If you are happy to use the same system as was used for this project then [click this link](https://aka.ms/wsl-ubuntu-1804) and Ubuntu 18.04 will begin downloading.
+
+If you would like to install a different Linux distro then [click this link](https://docs.microsoft.com/en-us/windows/wsl/install-manual) where you will have a list of options to choose.
 
 
 # Test
