@@ -80,8 +80,49 @@ If both previous steps were successful the next step is to download your Linux d
 
 If you are happy to use the same system as was used for this project then [click this link](https://aka.ms/wsl-ubuntu-1804) and Ubuntu 18.04 will begin downloading.
 
-If you would like to install a different Linux distro then [click this link](https://docs.microsoft.com/en-us/windows/wsl/install-manual) where you will have a list of options to choose.
+If you would like to install a different Linux distro then [click this link](https://docs.microsoft.com/en-us/windows/wsl/install-manual) where you will have a list of Linux distros to choose from.
 
+Assuming your download was successful and your Linux distro is present in your Downloads folder open Windows Powershell again and navigate to the download location.
+
+Assuming you are in the correct folder location using Windows Powershell that contains your downloaded Linux distro, Run the following command to install your version on Linux on your Windows 10 machine.
+
+```
+Note: Replace app_name with the name of your downloaded Linux version
+
+Add-AppxPackage .\app_name.appx
+```
+
+If all previous steps have been successfully followed then your version should be installed. The next step is to initialize your distro and set up some security features. The following steps will get you up and running with your version of Liux:
+
+1. Open search menu on Windows task bar and search for your Linux distro name
+
+2. Optional: Right click your distro and pin to your task bar for easy access.
+
+3. Click your Linux distro and start it up
+
+After this your Linux distro will need a few minutes to initialize and then you will be required to enter a name and password. Assuming that all went well then Congratulations you have access to both Windows and Linux on the one system.
+
+## Installing the C compiler
+
+The next steps involve installing the C compiler. These steps will now work whether you are on a Linux machine or using the Windows sub-system for Linux. From the Linux shell run the following commands:
+
+Run the following command to be sure your file system is up to date
+
+```
+sudo apt-get update
+```
+
+Then run this command to install all essential toolchains required to run C programs
+
+```
+sudo apt-get install build-essential
+```
+
+Finally run the following command to confirm no errors are raised and the installation was successful  
+
+```
+gcc --version
+```
 
 # Test
 
