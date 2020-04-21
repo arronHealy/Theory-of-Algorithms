@@ -124,6 +124,78 @@ Finally run the following command to confirm no errors are raised and the instal
 gcc --version
 ```
 
+## Installing cmocka
+
+Since the updated version of the project spec was released, we were required to write some tests for the MD5 message-digest algorithm implemented using C. We were free to choose how we went about testing our code and I choose to use the cmocka testing framework. The md5.c file contains all the required imports to use use cmocka so to run the code you will need to install it.
+
+To install cmocka run the following commands from the Linux shell:
+
+If you wish to install the cmocka documentation then run this command:
+
+```
+sudo apt-get install cmocka-doc
+```
+
+To install the cmocka development files run the following command:
+
+```
+sudo apt-get install libcmocka-dev
+```
+
+Assuming you have entered these two commands, then cmocka should be installed and ready to use in your C programs.
+
+If you would like to learn more about cmocka, then you can [follow this link](https://www.youtube.com/watch?v=GYBtduwyhaM) to a talk from DevConf 2020 where the speaker dives into it's features.
+
+Alternatively you can [follow this link](https://www.samba.org/~asn/sambaxp_2018_andreas_schneider_cmocka.pdf) if you wish to read the slides presented at that conference.
+
+## Cloning the Repository
+
+To clone this repository you will need the Git software installed on your machine. To install Git on your machine [follow this link](https://git-scm.com/) and follow the installation instructions. Assuming you have the Git software installed, open a terminal window and navigate to a location where you would like this repository to be cloned. Once at this location enter the following command in the terminal.
+
+```
+git clone https://github.com/arronHealy/Theory-of-Algorithms.git
+```
+
+Once the repository is cloned move into the project folder with the following command.
+
+```
+Note: If using Windows sub-system for Linux you must mount to your C drive to access local file system by entering:
+
+cd /mnt/c/go-to-location-of-cloned-repository
+
+and then enter:
+
+cd Theory-of-Algorithms/theory-of-algorithms-project
+```
+
+## Compiling and Running the Program
+
+To run the C code in the project repository has changed since the addition of cmocka. To run this code now the following command must be entered assuming all previous installation steps have been followed and you are in the project folder:
+
+The following command compiles your C program and the -l command links the comcka files needed to compile and test the code.
+
+```
+gcc -o md5 md5.c -l cmocka
+```
+
+There should have been no errors and now in the project folder there should now be an md5 executable file. To run this file the program takes command line arguments, to view the list of arguments available execute this file with the following command:
+
+```
+./md5 --help
+```
+
+This command will display the available command line arguments that are recognized with their descriptions and with that the MD5 C program is ready to be run and tested by you.
+
+* Note: If you choose to execute any of the files in the other folders you can omit -l cmocka when compiling as these files do not use any testing library. So to be clear if you were to run the sha256 file you may compile it using:
+
+```
+gcc -o sha256 sha256.c
+
+or
+
+make sha256
+```
+
 # Test
 
 
