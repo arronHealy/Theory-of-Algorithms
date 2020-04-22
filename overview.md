@@ -196,8 +196,17 @@ or
 make sha256
 ```
 
-# Test
+# Testing the code
 
+When testing the code for this project the unit testing framework that was used is cmocka. cmocka is a unit testing framework for C, that only requires the standard C library to run and works on a range of computing platforms and different compilers. cmocka is written entirely in C so it is a good choice of a framework to use as it gives developers confidence that the tests written will match the production environment that is running the code. The way cmocka is used is, you will write tests for your code and compile those tests along with a subset of your code into an executable. You can then run that executable which will execute the unit tests and print the test results to the command line. cmocka gives you assert methods and a way to mock functionality.
+
+The tests that have been written for the code in this are prefixed with TESTCASE at the beginning of each test function.
+
+To run the tests in this project run the executable file with the following command:
+
+```
+./md5 --test
+```
 
 # Algorithm
 
