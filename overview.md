@@ -208,7 +208,38 @@ To run the tests in this project run the executable file with the following comm
 ./md5 --test
 ```
 
-# Algorithm
+# Algorithm Overview
+
+The following will give an overview of the MD5 message-digest algorithm and the steps involved in successfully implmenting. The MD5 algorithm is the 5th version of the message digest algorithm developed by Ron Rivest to produce a 128 bit message digest output. The algorithm takes any size input and from that input will produce the 128 bit hashed value with the main motive for development being security. To be considered secure the algorithm must meet two requirements:
+
+1. It should be impossible for two different inputs to produce the same hashed output.
+
+2. It should be impossible for two of the same inputs to produce a different hash function.
+
+The MD5 algorithm produces the 128 bit output by going through the following 5 steps:
+
+## Step 1: Padding the Message
+
+Padding means adding extra bits to the original message. So the original message is padded such that its length in bits is congruent to 448 modulo 512. Padding is done such that the total bits are 64 less than being a multiple of 512 bits length. Padding is done even if the length of the original message is already congruent to 448 modulo 512. When padding, the first bit is 1 and the rest of the bits are 0.
+
+
+## Step 2: Append original message length
+
+A 64-bit representation of the length of the message before the padding bits were added is appended to the result of the previous step. At this point, the resulting message has a length that is multiple of 512 bits.
+
+
+## Step 3: Initialize MD Buffer
+
+A four-word buffer (A,B,C,D) is used to compute the message digest. Here each of A, B, C, D is a 32-bit register. These registers are initialized to the following values in hexadecimal, low-order bytes first.
+
+## Step 4: Process Message in 16-Word Blocks
+
+We first define four auxiliary functions that each take as input three 32-bit words and produce as output one 32-bit word. These functions use logical operators like AND, XOR, NOT.
+
+
+## Step 5: Output the Message
+
+The message digest produced as output is A, B, C, D. That is, we begin with the low-order byte of A, and end with the high-order byte of D.
 
 
 # Complexity
