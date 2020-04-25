@@ -250,7 +250,10 @@ The message digest produced as output is A, B, C, D. That is, we begin with the 
 
 ![MD5 - Padding the message](./images/md5-step5.PNG)
 
-# Complexity
+# Hash functions & Algorithm Complexity
+
+The MD5 algorithm belongs to a family of message digest hash functions and was the most popular and widley used hash function for many years. The MD family comprises of 128 bit hash functions MD2, MD4, MD5 & MD6 that were adopted as part of the [Internet Standard RFC 1321.](https://tools.ietf.org/html/rfc1321) MD5 digests have been widely used as a means to verify the integrity of transferred files, where a file server would often provide a pre-computed checksum so that a user could then compare the downloaded file to it. The MD5 algorithm is now no longer recommended for use as in [2004 a collision was produced](https://crypto.stackexchange.com/questions/29225/what-was-the-first-md5-collision-ever-constructed) which resulted in MD5 being considered compromised and no longer being considered as a secure means of data transfer over a network.   
+
 
 
 # References
