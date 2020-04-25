@@ -252,8 +252,32 @@ The message digest produced as output is A, B, C, D. That is, we begin with the 
 
 # Hash functions & Algorithm Complexity
 
+## Hash functions
+
+The MD5 algorithm takes an input and produces a hashed output through a hash function. A hash function is a mathematical function that converts a numerical input value to a compressed numerical output value, the input value to the function can be of any length but the output value is always of fixed length and referred to as a message digest or simply a hash value.
+
 The MD5 algorithm belongs to a family of message digest hash functions and was the most popular and widley used hash function for many years. The MD family comprises of 128 bit hash functions MD2, MD4, MD5 & MD6 that were adopted as part of the [Internet Standard RFC 1321.](https://tools.ietf.org/html/rfc1321) MD5 digests have been widely used as a means to verify the integrity of transferred files, where a file server would often provide a pre-computed checksum so that a user could then compare the downloaded file to it. The MD5 algorithm is now no longer recommended for use as in [2004 a collision was produced](https://crypto.stackexchange.com/questions/29225/what-was-the-first-md5-collision-ever-constructed) which resulted in MD5 being considered compromised and no longer being considered as a secure means of data transfer over a network.   
 
+In order to be considered effective tools in securing data, hash functions are expected to have the following properties:
+
+### Pre-Image Resistance
+
+Pre-Image resistance is the property of a hash function that refers to it being hard to invert. In other words, given an element in the range of a hash function, it should be computationally impossible to find an input that maps to that element.
+
+
+### Second Pre-Image Resistance
+
+Second Pre-Image resistance is the property of a hash function that refers to it being computationally impossible to find any second input that has the same output as a given input. In other words, if a hash function h for an input x produces hash value h(x), then it should be difficult to find any other input value y such that h(y) = h(x).
+
+### Collision Resistance
+
+Collision resistance is the property of a hash function that refers to the fact that it should be extremely difficult to find two different inputs of any length that result in the same hash value. In other words, for a hash function h, it is hard to find any two different inputs x and y such that h(x) = h(y). Since a hash function compresses the output value to a fixed length, it is impossible for it not to have collisions but this property only confirms it should be extremely difficult to find a collision.
+
+## Algorithm Complexity
+
+The complexity of an algorithm is concerned with how fast or slow it performs. Complexity is defined as a numerical function T(n) - time versus the input size of n. Complexity is expressed using Big O notation, which is a way to describe how fast a function is growing for the input size n. As an example definition if an algorithm is incrementing the number value in a list of length n, then it would be said that this algorithm runs in O(n) time and performs O(1) work for each element in the list. 
+
+[Follow this link for further explanation of Big O notations.](https://yourbasic.org/algorithms/big-o-notation-explained/)
 
 
 # References
