@@ -279,6 +279,10 @@ The complexity of an algorithm is concerned with how fast or slow it performs. C
 
 [Follow this link for further explanation of Big O notations.](https://yourbasic.org/algorithms/big-o-notation-explained/)
 
+### MD5 Complexity
+
+The MD5 algorithm processes data in 512 bit blocks, doing 4 rounds of hashing operations for each block. Since the hashing operations are performed on a fixed size of 512 bit blocks, the time complexity of performing hashing is O(1). As stated the input to the MD5 algorithm can be of any size but is always processed in 512 bit blocks, so there are O(n) applications of hashing operations being applied to those blocks with the cost of padding the message being O(1) but potentially being O(n). Overall this means that the cost of running the MD5 algorithm is O(n) because each bit is visited at least once and the work done per bit is constant or O(1).
+
 
 # References
 
