@@ -299,6 +299,7 @@ The next indication that the design of the MD5 algorithm was flawed was brought 
 
 In 2004 cryptographers from China published their paper demonstarting their ability to generate collisions in the MD5 algorithm using the same initialization values. Their research showed that it is possible to produce two related 512 bit blocks and modify specific bits within these blocks to create two slightly different messages that have the same hash value. On average the amount of time to create the MD5 message pair was about 1 hour. Later that year the designer of the MD5 algorithm Ron Rivest wrote <i>"md5 and sha1 are both clearly broken (in terms of collision-resistance)."</i>
 
+![MD5 - Padding the message](./images/collision.PNG)
 
 
 # References
