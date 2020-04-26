@@ -283,6 +283,21 @@ The complexity of an algorithm is concerned with how fast or slow it performs. C
 
 The MD5 algorithm processes data in 512 bit blocks, doing 4 rounds of hashing operations for each block. Since the hashing operations are performed on a fixed size of 512 bit blocks, the time complexity of performing hashing is O(1). As stated the input to the MD5 algorithm can be of any size but is always processed in 512 bit blocks, so there are O(n) applications of hashing operations being applied to those blocks with the cost of padding the message being O(1) but potentially being O(n). Overall this means that the cost of running the MD5 algorithm is O(n) because each bit is visited at least once and the work done per bit is constant or O(1).
 
+### Breaking the MD5 Algorithm
+
+As discussed in the introduction of this section of the document the MD5 algorithm takes an input and produces a hashed output through a hash function. Also discussed in the introduction was the fact that hash functions are expected to have certain properties to be considered effective tools in securing data. Since MD5 had been widely adopted researchers began investigating if there were any vulnerabilities in the algorithm by trying to exploit these properties and prove that it is not totally secure before any clever hacker were to come up with a method and compromise potentially thousands of users data that had been secured using the MD5 process. The following section will examine the findings published in relation to design flaws present in the MD5 algorithm:
+
+### [Den Boer and Bosselaers, 1994](https://link.springer.com/content/pdf/10.1007/3-540-48285-7_26.pdf)
+
+Since it's original release the design of the MD5 algorithm had been heavily scrutenized by the cryptographic community. Early research attempts to attack the MD5 algorithm only showed minor weaknesses in it's design. However, in 1994 the first serious sign of a design flaw was published in the linked paper by Boer and Bosselaers. In this paper they demonstrated that given certain input conditions it was possible for identical internal states to exist for some MD5 computations. They never expanded upon their research to try and show that these identical internal states would lead to duplicate hashes being produced for different input values.
+
+### [Dobbertin, 1996](https://pdfs.semanticscholar.org/dbda/84f9d3e47d63f7d28482bf93170c4a85a398.pdf)
+
+The next indication that the design of the MD5 algorithm was flawed was brought to light by research Dobbertin published in 1996. In this paper Dobbertin demonstrated that two identical hashes could be produced for different messages if the initialization values could be chosen. The initialization values are the internal variables that are set before the hashing process begins. Since the MD5 algorithm is always set to the same initialization values, Dobbertin's findings did not present an immediate threat to the algorithm but showed that collisions were not only possible but inevitable.  
+
+
+
+
 
 # References
 
