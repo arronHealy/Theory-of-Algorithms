@@ -287,15 +287,17 @@ The MD5 algorithm processes data in 512 bit blocks, doing 4 rounds of hashing op
 
 As discussed in the introduction of this section of the document the MD5 algorithm takes an input and produces a hashed output through a hash function. Also discussed in the introduction was the fact that hash functions are expected to have certain properties to be considered effective tools in securing data. Since MD5 had been widely adopted researchers began investigating if there were any vulnerabilities in the algorithm by trying to exploit these properties and prove that it is not totally secure before any clever hacker were to come up with a method and compromise potentially thousands of users data that had been secured using the MD5 process. The following section will examine the findings published in relation to design flaws present in the MD5 algorithm:
 
-### [Den Boer and Bosselaers, 1994](https://link.springer.com/content/pdf/10.1007/3-540-48285-7_26.pdf)
+### [Den Boer and Bosselaers - 1994](https://link.springer.com/content/pdf/10.1007/3-540-48285-7_26.pdf)
 
 Since it's original release the design of the MD5 algorithm had been heavily scrutenized by the cryptographic community. Early research attempts to attack the MD5 algorithm only showed minor weaknesses in it's design. However, in 1994 the first serious sign of a design flaw was published in the linked paper by Boer and Bosselaers. In this paper they demonstrated that given certain input conditions it was possible for identical internal states to exist for some MD5 computations. They never expanded upon their research to try and show that these identical internal states would lead to duplicate hashes being produced for different input values.
 
-### [Dobbertin, 1996](https://pdfs.semanticscholar.org/dbda/84f9d3e47d63f7d28482bf93170c4a85a398.pdf)
+### [Dobbertin - 1996](https://pdfs.semanticscholar.org/dbda/84f9d3e47d63f7d28482bf93170c4a85a398.pdf)
 
 The next indication that the design of the MD5 algorithm was flawed was brought to light by research Dobbertin published in 1996. In this paper Dobbertin demonstrated that two identical hashes could be produced for different messages if the initialization values could be chosen. The initialization values are the internal variables that are set before the hashing process begins. Since the MD5 algorithm is always set to the same initialization values, Dobbertin's findings did not present an immediate threat to the algorithm but showed that collisions were not only possible but inevitable.  
 
+### [Wang, Feng, Lai, Yu - 2004](https://eprint.iacr.org/2004/199.pdf)
 
+In 2004 cryptographers from China published their paper demonstarting their ability to generate collisions in the MD5 algorithm using the same initialization values. Their research showed that it is possible to produce two related 512 bit blocks and modify specific bits within these blocks to create two slightly different messages that have the same hash value. On average the amount of time to create the MD5 message pair was about 1 hour. Later that year the designer of the MD5 algorithm Ron Rivest wrote <i>"md5 and sha1 are both clearly broken (in terms of collision-resistance)."</i>
 
 
 
