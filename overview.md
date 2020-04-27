@@ -299,7 +299,15 @@ The next indication that the design of the MD5 algorithm was flawed was brought 
 
 In 2004 cryptographers from China published their paper demonstarting their ability to generate collisions in the MD5 algorithm using the same initialization values. Their research showed that it is possible to produce two related 512 bit blocks and modify specific bits within these blocks to create two slightly different messages that have the same hash value. On average the amount of time to create the MD5 message pair was about 1 hour. Later that year the designer of the MD5 algorithm Ron Rivest wrote <i>"md5 and sha1 are both clearly broken (in terms of collision-resistance)."</i>
 
-![MD5 - Padding the message](./images/collision.PNG)
+![MD5 - Collisions](./images/collision.PNG)
+
+### [Klima - 2006](https://eprint.iacr.org/2006/105.pdf)
+
+The first collision attack was proposed by Wang et al. Since this there have been several improved attacks proposed. The most effective attack proposed by Klima can generate a collision within one minute with a standard computer.
+
+### [Sasaki, Aoki - 2009](https://iacr.org/archive/eurocrypt2009/54790136/54790136.pdf)
+
+This paper presents the first preimage attack on the MD5 algorithm. The attack has a complexity of 2<sup>116.9</sup> to generate a pseudo-preimage for MD5 and then has a complexity of 2<sup>123.4</sup> to generate the preimage of MD5. The memory complexity of the attack is 2<sup>45</sup> x 11 words. The attack is based on splice and cut and local-collision techniques that have been applied to the step reduced MD5 hash function. This attack is proposed on a theoretical basis and has not yet been implemented so MD5's preimage resistance still in reality has not yet been broken.
 
 
 # References
