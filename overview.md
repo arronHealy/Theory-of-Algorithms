@@ -312,3 +312,39 @@ This paper presents the first preimage attack on the MD5 algorithm. The attack h
 
 # References
 
+* https://www.tutorialspoint.com/cryptography/cryptography_hash_functions.htm
+
+This site is relevant to the document as it got me thinking of not just walking through the MD5 algorithm with vague references to the steps invloved. MD5 like many other hashing algorithms at their core is a hash function and with any hash function their are properties expected of them and through this I was able expand on the concepts a bit more as a guide through the hashing process.
+
+* https://crypto.stackexchange.com/questions/3441/is-a-second-preimage-attack-on-md5-feasible/3445#3445
+
+This post on stack exchange is relevant to the document as it confirmed to me that as I was researching the topic of the properties of hash functions being exploited in MD5 that the second preimage attack had not been documented in any sort of paper and that the timeline of breaking the MD5 algorithm had been followed correctly.
+
+* https://stackoverflow.com/questions/26369835/what-is-the-best-strategy-to-create-a-collision-with-md5-hash-algorithm
+
+This post on stack overflow was relevant to the document as it provided with a fair understanding of the efforts taken to break MD5 and that for password hashing by using <b>rainbow tables</b> MD5 can be cracked but if you introduce a <b>salt</b> then you defeat this process and are left only with the option of using a <b>brute force approach</b>.
+
+* https://crypto.stackexchange.com/questions/50426/could-we-break-md5-entirely-in-the-future
+
+This post on stack exchange is relevant as it made me consider the concepts of rainbow tables and brute force approaches even further. It also talked more about the expected properties of hash functions and what would be needed in theory to find the preimage for MD5.
+
+* https://security.stackexchange.com/questions/15790/why-do-people-still-use-recommend-md5-if-it-has-been-cracked-since-1996
+
+Again this post on stack exchange went into depth about the properties of hash functions and the attempts to break MD5. It also provided good links in relation to password hashing and discussing how rainbow tables and brute force can easily break MD5 if a salt is not used.
+
+* https://stackoverflow.com/questions/27060316/is-it-possible-to-reverse-md5
+
+This post from stack overflow explained the concept of hash functions as one way functions that cannot be reversed but can be broken through brute force attacks. This post also explained the fact MD5 is broken in terms of collisions.
+
+* https://stackoverflow.com/questions/1240852/is-it-possible-to-decrypt-md5-hashes
+
+This post explained the difference of MD5 being a hash function and is therefore separate from cryptography. Explaining that you cannot decrypt it as much of the original data is lost as part of the transformation function. It then goes into detail about the possible values MD5 produces and then goes further into rainbow tables and brute force approaches.
+
+* https://crypto.stackexchange.com/questions/29225/what-was-the-first-md5-collision-ever-constructed
+
+This post introduced me to the first collision that was documented in the MD5 algorithm by Wang et al. It provided good visuals on what collisions were recorded and also provides godd links to other related articles.
+
+* https://security.stackexchange.com/questions/34531/whats-an-attacks-computational-complexity
+
+This post on stack exchange talks about the proposed preimage attack on MD5 and the computational complexity that would be involved to attack the algorithm. The post talks about the get lucky and random oracle attacks complexity while also discussing what is meant when referring to cpu effort when measuring an attack algorithms complexity.
+
