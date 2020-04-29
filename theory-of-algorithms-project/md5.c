@@ -36,7 +36,14 @@ int main(int argc, char *argv[])
         cmocka_unit_test(TESTCASE_FF_ROUND_ONE_equals),
         cmocka_unit_test(TESTCASE_GG_ROUND_TWO_equals),
         cmocka_unit_test(TESTCASE_HH_ROUND_THREE_equals),
-        cmocka_unit_test(TESTCASE_II_ROUND_FOUR_equals)
+        cmocka_unit_test(TESTCASE_II_ROUND_FOUR_equals),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_1),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_2),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_3),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_4),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_5),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_6),
+        cmocka_unit_test(TESTCASE_RFC_1321_TEST_7)
     };
 
     int option = 0, index = 0;
@@ -701,3 +708,236 @@ void TESTCASE_nexthash_equals(void **state){
     assert_int_equal(H1[3], H2[3]);
 }
 
+// these tests are defined in the RFC 1321 - Page 20 - A.5 Test suite
+// https://tools.ietf.org/html/rfc1321
+
+void TESTCASE_RFC_1321_TEST_1(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0xd41d8cd9, 0x8f00b204, 0xe9800998, 0xecf8427e};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "empty";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_2(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0x0cc175b9, 0xc0f1b6a8, 0x31c399e2, 0x69772661};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test2.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_3(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0x90015098, 0x3cd24fb0, 0xd6963f7d, 0x28e17f72};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test3.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_4(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0xf96b697d, 0x7cb7938d, 0x525a2f31, 0xaaf161d0};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test4.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_5(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0xc3fcd3d7, 0x6192e400, 0x7dfb496c, 0xca67e13b};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test5.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_6(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0xd174ab98, 0xd277d9f5, 0xa5611c2c, 0x9f419d9f};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test6.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}
+
+void TESTCASE_RFC_1321_TEST_7(void **state)
+{
+    // expected values for test
+    WORD H1[] = {0x57edf4a2, 0x2be3c955, 0xac49da2e, 0x2107b67a};
+
+    // md5 initial starting values
+    WORD H2[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
+
+    BLOCK test_block;
+
+    FILE* testFile;
+
+    uint64_t nobits = 0;
+
+    FLAG status = READ;
+
+    char filePath[] = "rfc-test7.txt";
+
+    testFile = fopen(filePath, "rb");
+
+    while(nextBlock(&test_block, testFile, &nobits, &status))
+    {
+        nexthash(&test_block, H2);
+    }
+
+    fclose(testFile);
+
+    assert_int_equal(H1[0], bswap_32(H2[0]));
+    assert_int_equal(H1[1], bswap_32(H2[1]));
+    assert_int_equal(H1[2], bswap_32(H2[2]));
+    assert_int_equal(H1[3], bswap_32(H2[3]));
+}

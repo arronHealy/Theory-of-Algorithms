@@ -86,3 +86,17 @@ void TESTCASE_GG_ROUND_TWO_equals(void **state);
 void TESTCASE_HH_ROUND_THREE_equals(void **state);
 
 void TESTCASE_II_ROUND_FOUR_equals(void **state);
+
+void TESTCASE_RFC_1321_TEST_1(void **state);
+
+void TESTCASE_RFC_1321_TEST_2(void **state);
+
+void TESTCASE_RFC_1321_TEST_3(void **state);
+
+void TESTCASE_RFC_1321_TEST_4(void **state);
+
+void TESTCASE_RFC_1321_TEST_5(void **state);
+
+void TESTCASE_RFC_1321_TEST_6(void **state);
+
+void TESTCASE_RFC_1321_TEST_7(void **state);
