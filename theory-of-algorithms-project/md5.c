@@ -147,34 +147,31 @@ void readStringInput()
 
   char* messageText;
 
+  char string[100];
+
   FILE* inputFile;
 
   // initialization of md5 context hash constants
   // https://www.ietf.org/rfc/rfc1321.txt - page 11
   WORD H[] = {0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
-
-  // allocate memory for string input
-  messageText = (char*)malloc(50 * sizeof(char));
  
   // prompt user for string input
   printf("\nPlease enter the Text to be hashed: ");
-  scanf("%s", messageText);
 
-  printf("Entered Text is: %s", messageText);
+  fgets (string, 100, stdin);
+  /* Here remove  the trailing new line char; not required unless you are trying to print the string */
+  string[strlen(string) - 1] = '\0';
+
+  printf("Entered Text is: %s", string);
   printf("\n");
 
   // try and write string input to file
-  writeStatus = writeToFile(messageText);
+  writeStatus = writeToFile(string);
   
   if (writeStatus == 0)
   {
     printf("Error writing string to file! Please try again.\n");
     return;
-  }
-  else
-  {
-    // free memory of string input if written to file
-    free(messageText);  
   }//if
 
   // read file contents as binary data
