@@ -74,6 +74,7 @@ int nextBlock(BLOCK *M, FILE *inFile, uint64_t *nobits, FLAG *status);
 
 void nexthash(BLOCK *M, WORD *H);
 
+void printHelpOptions();
 
 // md5.c cmocka unit test definitions
 void TESTCASE_nexthash_equals(void **state);

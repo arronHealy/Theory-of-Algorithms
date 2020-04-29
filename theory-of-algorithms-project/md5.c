@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     while ((option = getopt_long(argc, argv, "htfs:", long_options, &index )) != -1) {
         switch (option) {
              case 'h':
-                printf("help command \n");
+                printHelpOptions();
              break;
              
              case 't': 
@@ -144,8 +144,6 @@ void readStringInput()
   uint64_t nobits = 0;
 
   FLAG status = READ;
-
-  char* messageText;
 
   char string[100];
 
@@ -398,6 +396,16 @@ int writeToFile(char* input)
   fclose(textFile);
 
   return 1;
+}
+
+
+void printHelpOptions()
+{
+  printf("Options: \n");
+  printf("\t --help \t\t Display this information.\n");
+  printf("\t --test \t\t Executes the suite of cmocka unit tests defined in this file.\n");
+  printf("\t --string \t\t Prompts the user for an input string and then prints out the MD5 hashed output for that string.\n");
+  printf("\t --file \t\t Prompts the user for a file path and then prints out the MD5 hashed outptut for the file contents.\n");
 }
 
 
