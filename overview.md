@@ -57,7 +57,7 @@ This file is used as part of the program when the user chooses to input a string
 
 * <b>rfc-test2 - 7.txt</b>
 
-The rfc-test files ranging from 2 to 7 contain the string inputs defined in the [Request For Comments 1321 document supplied by the Internet Engineering Task Force.](https://tools.ietf.org/html/rfc1321) web page. These input values are listed as part of a test suite with their corresponding ouptu values to test your implementation of the MD5 algorithm and check whether it is correct. The rfc-test1 is omitted as the first test is an empty string and this is handled by the empty file defined above.
+The rfc-test files ranging from 2 to 7 contain the string inputs defined in the [Request For Comments 1321 document supplied by the Internet Engineering Task Force](https://tools.ietf.org/html/rfc1321) web page. These input values are listed as part of a test suite with their corresponding output values to test against for your implementation of the MD5 algorithm and check whether it is correct. The rfc-test1 is omitted as the first test is an empty string and this is handled by the empty file defined above.
 
 
 # Running the Program
