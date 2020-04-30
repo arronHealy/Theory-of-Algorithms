@@ -53,7 +53,11 @@ This an empty file that was created when testing the algorithm. When performing 
 
 * <b>inputText.txt:</b>
 
-This file is used as part of the program when the user chooses to input a string. The program takes the user input writes it to this file and then proceeds to read the file contents as binary data and then perform the MD5 algorithm to output the correct hash value for a given input. 
+This file is used as part of the program when the user chooses to input a string. The program takes the user input writes it to this file and then proceeds to read the file contents as binary data and then perform the MD5 algorithm to output the correct hash value for a given input.
+
+* <b>rfc-test2 - 7.txt</b>
+
+The rfc-test files ranging from 2 to 7 contain the string inputs defined in the [Request For Comments 1321 document supplied by the Internet Engineering Task Force.](https://tools.ietf.org/html/rfc1321) web page. These input values are listed as part of a test suite with their corresponding ouptu values to test your implementation of the MD5 algorithm and check whether it is correct. The rfc-test1 is omitted as the first test is an empty string and this is handled by the empty file defined above.
 
 
 # Running the Program
